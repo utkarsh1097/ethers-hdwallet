@@ -1,7 +1,7 @@
 
 
 import * as ethers from 'ethers';
-import * as readline from 'readline';
+import * as read from 'read';
 
 async function createWallet() {
     const wallet = ethers.Wallet.createRandom();
@@ -10,23 +10,16 @@ async function createWallet() {
 }
 
 async function loadWalletFromMnemonic() {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    rl.question('Please enter your mnemonic phrase: ', (mnemonicStr) => {
+    const mnemonicStr = await read.read({ prompt: 'Enter mnemonic phrase: ', silent: true });
         try {
             const mnemonic = ethers.Mnemonic.fromPhrase(mnemonicStr);
             const wallet = ethers.HDNodeWallet.fromMnemonic(mnemonic);
             console.log(wallet);
         } catch (error) {
             console.error('Invalid mnemonic phrase');
-        } finally {
-            rl.close();
         }
-    });
+
 }
 
-createWallet();
+// createWallet();
 loadWalletFromMnemonic();
